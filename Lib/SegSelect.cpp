@@ -66,9 +66,9 @@ SegmentDialog::SegmentDialog(QWidget *parent, UINT flags, LPCSTR title, LPCSTR s
         {
             segment_t *seg = getnseg(i);
             char buffer[32];
-            int len = strlen(_ui64toa((UINT64)seg->startEA, buffer, 16));
+            int len = strlen(_ui64toa((UINT64)seg->start_ea, buffer, 16));
             if (len > biggestStart) biggestStart = len;
-            len = strlen(_ui64toa((UINT64)seg->endEA, buffer, 16));
+            len = strlen(_ui64toa((UINT64)seg->end_ea, buffer, 16));
             if (len > biggestEnd) biggestEnd = len;
             len = strlen(_ui64toa((UINT64)seg->size(), buffer, 16));
             if (len > biggestSize) biggestSize = len;
@@ -103,8 +103,11 @@ SegmentDialog::SegmentDialog(QWidget *parent, UINT flags, LPCSTR title, LPCSTR s
             // Name w/checkbox
             segment_t *seg = getnseg(i);
             char buffer[100];
-            if (get_true_segm_name(seg, buffer, (sizeof(buffer) - 16)) <= 0)
-                strcpy(buffer, "none");
+			qstring segQs;
+			if (get_segm_name(&segQs, seg) <= 0)
+				strcpy(buffer, "none");
+			else
+				strncpy(buffer, segQs.c_str(), 100); // I HOPE IT WORKS!
             QTableWidgetItem *item = new QTableWidgetItem(buffer);
             LPCSTR iconFile;
             BOOL checked = FALSE;
@@ -192,9 +195,9 @@ SegmentDialog::SegmentDialog(QWidget *parent, UINT flags, LPCSTR title, LPCSTR s
             segmentTable->setItem(i, FLAGS, new QTableWidgetItem(buffer));
 
             // Start - End, Size
-            sprintf(buffer, startFormat, seg->startEA);
+            sprintf(buffer, startFormat, seg->start_ea);
             segmentTable->setItem(i, START, new QTableWidgetItem(buffer));
-            sprintf(buffer, endFormat, seg->endEA);
+            sprintf(buffer, endFormat, seg->end_ea);
             segmentTable->setItem(i, END, new QTableWidgetItem(buffer));
             sprintf(buffer, sizeFormat, seg->size());
             segmentTable->setItem(i, SIZE, new QTableWidgetItem(buffer));
