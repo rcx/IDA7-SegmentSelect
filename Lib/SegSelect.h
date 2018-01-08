@@ -15,9 +15,9 @@
 #endif
 #else
 #ifndef _DEBUG
-#pragma comment(lib, "SegSelectEA64.LiB")
+#pragma comment(lib, "SegSelect64.LiB")
 #else
-#pragma comment(lib, "SegSelectEA64D.LiB")
+#pragma comment(lib, "SegSelect64D.LiB")
 #endif
 #endif
 #endif
